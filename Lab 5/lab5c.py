@@ -12,7 +12,7 @@ output = []
 
 for token in tokens:
 
-    if re.search(r'(0[1-9]|[12][0-9]|3[01]/0[1-9]|1[0-2]/\d{4})', token) or re.search(r'([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', token):
+    if re.search(r'(0[1-9]|[12][0-9]|3[01]/0[1-9]|1[0-2]/\d{4})', token) or re.search(r'([a-zA-Z0-9._]+@[a-zA-Z0-9._]+\.[a-zA-Z0-9._]{2,})', token):
         output.append(cur_str.strip())
         cur_str = ''
         output.append(token)
