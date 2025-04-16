@@ -13,7 +13,6 @@ def custom_tokenizer(text: str):
 
     # Punctuations
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
-
     tokens = word_tokenize(text)
     return tokens
 

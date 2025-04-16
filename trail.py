@@ -1,18 +1,28 @@
-import re
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.model_selection import train_test_split
+from hmmlearn.hmm import GaussianHMM
+from sklearn.metrics import accuracy_score
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import GaussianNB
 
-text = "Contact me at abc.mahe@manipal.edu before 12/04/2025"
+data = fetch_20newsgroups(categories=['comp.graphics', 'sci.med'], remove=(
+    'headers', 'footers', 'quotes'))
 
-tokens = text.split()
-cur = ''
+labels = [0 if target == 0 else 1 for target in data.target]
 
-output = []
-for token in tokens:
+vectorize = CountVectorizer()
+x = vectorize.fit_transform(data.data).toarray()
 
-    if re.search(r'([a-zA-Z0-9._]+@[a-zA-Z0-9._]+\.[a-zA-Z0-9._]{2,})', token) or re.search(r'(0[1-9]|[12][0-9]|3[10])/(0[1-9]|1[0-2])/(\d{4})', token):
-        output.append(cur.strip())
-        cur = ''
-        output.append(token)
-    else:
-        cur = cur + token + ' '
+model = GaussianHMM(n_components=3, covariance_type='diag', n_iter=100)
+model.fit(x)
 
-print(output)
+features = model.predict(x).reshape(-1, 1)
+
+x_train, x_test, y_train, y_test = train_test_split(
+    features, labels, test_size=0.2, random_state=42)
+
+model = GaussianNB()
+model.fit(x_train, y_train)
+
+y_pred = model.predict(x_test)
+print(f'Accuracy Score: {accuracy_score(y_true=y_test, y_pred=y_pred)}')

@@ -14,7 +14,7 @@ for label, phrases in train_data.items():
     for phrase in phrases:
         tokens = word_tokenize(phrase.lower())
         tagged_sequences.append([(word, label) for word in tokens])
-
+print(tagged_sequences)
 # Train HMM model
 trainer = hmm.HiddenMarkovModelTrainer()
 model = trainer.train(tagged_sequences)
@@ -26,13 +26,14 @@ def predict(text: str):
     words = word_tokenize(text.lower())
     tagged_sentence = model.tag(words)
     tags = [tag for _, tag in tagged_sentence]
+    print(tags)
     return max(set(tags), key=tags.count) if tags else 'Unknown'
 
 
 # Testing
 test_data = {
     'Finance': 'The stock market is down',
-    'Sports': 'The football match was exciting',
+    'Sports': 'The football match was good',
 }
 
 true_labels = list(test_data.keys())
